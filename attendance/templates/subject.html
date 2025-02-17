@@ -60,7 +60,7 @@
           </h2>
           <br />
           <!-- Student Registration Form -->
-          <form action="{% url "subject" %}" method="post">
+          <form action="{% url "add_subject" %}" method="post">
             {% csrf_token %}
             <div class="form-group mb-3">
                 <input type="text" class="form-control" placeholder="Enter the id" name="id" required />

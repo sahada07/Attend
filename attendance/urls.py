@@ -12,6 +12,6 @@ urlpatterns = [
     path('update/<id>', views.updateData, name="updateData"),
     path('delete/<id>', views.deleteData, name="deleteData"),
     path('attendances', views.insert_attendance, name="attendances"),
-    # path('subject/add', views.AddSubject, name="add_subject"),
+    path('subject/add', views.AddSubject, name="add_subject"),
 ]
    

@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.contrib import messages
 from .models import Students, Attendances,Subjects,Courses,Staff
 
@@ -78,9 +78,7 @@ def attendance(request):
 def subject(request):
     """Display list of all subject records."""
     subject_list = Subjects.objects.all()
-    context = {
-        "subject_list": subject_list,
-        "message": messages.get_messages(request)}
+    context = {"subject_list": subject_list}
     return render(request, 'subject.html',context)
 
 def AddSubject(request):
@@ -95,6 +93,7 @@ def AddSubject(request):
         print(subject_name)
         print(staff)
 
+
         query=Subjects(
             id=id,
             course=course,
@@ -106,7 +105,7 @@ def AddSubject(request):
 
         subject_list = Subjects.objects.all()
         context= {"subject_list":subject_list}
-        return redirect("subject")
+        return render(request,'subject.html',context)
     return render(request, 'subject.html')
 
 
