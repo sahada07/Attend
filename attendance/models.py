@@ -1,85 +1,124 @@
 from django.db import models
 
-from django.db import models
-
-class User(models.Model):
-    user_id = models.CharField(max_length=50, primary_key=True)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
-    phone_number = models.CharField(max_length=20, blank=True, null=True)
-    usertype = models.CharField(max_length=50, blank=True, null=True)
-    department = models.CharField(max_length=20, blank=True, null=True)
-    status = models.CharField(max_length=50, blank=True, null=True)
-
-    def __str__(self):
-        return self.first_name + " " + self.last_name
+# Create your models here.
 
 
-class AuthCredential(models.Model):
+class Admin(models.Model):
     id = models.AutoField(primary_key=True)
-    employee = models.ForeignKey(User, on_delete=models.CASCADE, related_name="auth_credentials")
-    username = models.CharField(max_length=50, unique=True)
-    role_name = models.CharField(max_length=15)
-    password_hash = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    email = models.EmailField(max_length=255)
+    password = models.CharField(max_length=255)
+    objects = models.Manager()
+
+class Staff(models.Model):
+    id = models.AutoField(primary_key=True)
+    full_name = models.CharField(max_length=255)
+    email = models.EmailField(max_length=255)
+    password = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
 
-    def __str__(self):
-        return self.username
-
-
-class Report(models.Model):
-    employee = models.ForeignKey(AuthCredential, on_delete=models.CASCADE)
-    username = models.CharField(max_length=255)
-    checkInTime = models.TimeField()
-    late_duration = models.TimeField(blank=True, null=True)
-    late_reasons = models.TextField(blank=True, null=True)
-    department = models.CharField(max_length=50)
-    attendance_status = models.CharField(max_length=50)
+class Courses(models.Model):
+    id = models.AutoField(primary_key=True)
+    course_name = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
-    checkOutTime = models.TimeField(blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
 
-    def __str__(self):
-        return f"{self.username} - {self.attendance_status}"
+class Subjects(models.Model):
+    id = models.AutoField(primary_key=True)
+    course= models.ForeignKey(Courses, on_delete=models.CASCADE)
+    subject_name = models.CharField(max_length=255)
+    staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
 
-
-class Visitor(models.Model):
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    check_in_time = models.DateTimeField(auto_now_add=True)
-    visitor_type = models.CharField(max_length=50)
-    host_name = models.CharField(max_length=50)
-    purpose_of_visit = models.CharField(max_length=50, blank=True, null=True)
-    photo_capture = models.BooleanField(default=False)
-    check_time_out = models.DateTimeField(blank=True, null=True)
+class Students(models.Model):
+    id = models.AutoField(primary_key=True)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255, default='')
+    email = models.EmailField(max_length=255)
+    password = models.CharField(max_length=255)
+    gender = models.CharField(max_length=50)
+    profile_pic = models.FileField(upload_to='student_profiles/')
+    address = models.TextField()
+    course = models.ForeignKey(Courses, on_delete=models.DO_NOTHING, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
-
-class IncomingLetter(models.Model):
-    sender_first_name = models.CharField(max_length=50)
-    sender_last_name = models.CharField(max_length=50)
-    phone_number = models.CharField(max_length=20, blank=True, null=True)
-    sender_type = models.CharField(max_length=50)
-    letter_type = models.CharField(max_length=50)
-    department_routing = models.CharField(max_length=50)
-    status = models.CharField(max_length=20, blank=True, null=True)
-    date_receipt = models.DateTimeField(auto_now_add=True)
+class Attendances(models.Model):
+    id = models.AutoField(primary_key=True)
+    subject = models.ForeignKey(Subjects, on_delete=models.DO_NOTHING)
+    status=models.BooleanField(default=False)
+    attendance_date = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
 
-    def __str__(self):
-        return self.letter_type
-
-
-class OutgoingLetter(models.Model):
-    letter_type = models.CharField(max_length=50)
-    company_name = models.CharField(max_length=50)
-    department_name = models.CharField(max_length=50)
-    dispatch_date = models.DateField()
-    dispatch_method = models.CharField(max_length=50)
+class AttendanceReport(models.Model):
+    id = models.AutoField(primary_key=True)
+    student = models.ForeignKey('Students', on_delete=models.DO_NOTHING)
+    attendance = models.ForeignKey(Attendances, on_delete=models.CASCADE)
+    status = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
 
-    def __str__(self):
-        return self.letter_type
-# Create your models here.
+class LeaveReportStudent(models.Model):
+    id = models.AutoField(primary_key=True)
+    student = models.ForeignKey(Students, on_delete=models.CASCADE)
+    leave_status = models.BooleanField(default=False)
+    leave_message = models.TextField()
+    leave_date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
+
+class LeaveReportStaff(models.Model):
+    id = models.AutoField(primary_key=True)
+    staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    leave_status = models.BooleanField(default=False)
+    leave_message = models.TextField()
+    leave_date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
+
+class FeedbackStudent(models.Model):
+    id = models.AutoField(primary_key=True)
+    student = models.ForeignKey(Students, on_delete=models.CASCADE)
+    feedback = models.TextField()
+    feedback_reply = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+    objects = models.Manager()
+
+class FeedbackStaff(models.Model):
+    id = models.AutoField(primary_key=True)
+    staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    feedback = models.TextField()
+    feedback_reply = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+    objects = models.Manager()
+
+class NotificationStudent(models.Model):
+    id = models.AutoField(primary_key=True)
+    student = models.ForeignKey(Students, on_delete=models.CASCADE)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
+
+class NotificationStaff(models.Model):
+    id = models.AutoField(primary_key=True)
+    staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
