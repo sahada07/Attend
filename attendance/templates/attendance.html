@@ -17,131 +17,118 @@
   </head>
   <body>
     <!-- As a link -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="/">Attendance Management System</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link active" href="/">Students</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/attendance">Attendance</a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" href="/subject">Subjects</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/reports">Reports</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Department
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="/faculty">Faculty</a></li>
-                <li><a class="dropdown-item" href="/coorperate">Coorperate</a></li>
-                <li><hr class="dropdown-divider"></li>
-                
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
+    {% include 'inc/navbar.html'%}
+    
     <div class="container mt-5">
       <div class="row">
         <div class="col-md-4">
-          <h2 class="text-white bg-dark text-center p-2">Student Attendance</h2>
-          <form action="/attendances" method="post" class="mt-4">
+          <div class="card shadow-sm">
+          <h2 class="text-white bg-dark text-center p-2 mb-0">Student Attendance</h2>
+          <div class="card-body">
+          <form action="{% url 'attendance' %}" method="post" class="mt-4">
             {% csrf_token %}
 
-            <div class="form-group mb-3">
+            <div class="mb-3">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Enter ID"
+                name="id"
+                
+              />
+            </div>
+
+            <div class=" mb-3">
               <input
                 type="text"
                 class="form-control"
                 placeholder="Enter subject ID"
-                name="id"
+                name="subject_id"
                 required
               />
-            </div>
-
-              <div class="form-group mb-3">
-              <select class="form-select" name="subject" required>
-                <option value="" selected disabled>Select Student Subject</option>
-                <optgroup label="Computing Programs">
-                  <option value="Diploma in Business Computing">Diploma in Business Computing (DBC)</option>
-                  <option value="Networking Information Security">Networking Information Security (NIS)</option>
-                  <option value="Certificate in Software Development">Certificate in Software Development (CSD)</option>
-                </optgroup>
-                <optgroup label="Business Programs">
-                  <option value="Office Application">Office Application (OPS)</option>
-                  <option value="Data Analytics with Power BI">Data Analytics with Power BI</option>
-                </optgroup>
-                <optgroup label="Certifications">
-                  <option value="cisa">Certified Information System Auditor (CISA)</option>
-                  <option value="itil">Information Technology Infrastructure Library (ITIL)</option>
-                  <option value="cybersecurity">Cybersecurity</option>
-                  <option value="data analytics">Data Analytics</option>
-                </optgroup>
-              </select>
-            </div>
-
-
-
-            <!-- <div class="form-group mb-3">
-              <input
-                type="date"
-                class="form-control"
-                name="date"
-                required
-              />
-            </div> -->
-
-            <div class="form-group mb-3">
-              <select class="form-select" name="status" required>
-                <option value="" selected disabled>Select Student Status</option>
-                <option value="Present">Present</option>
-                <option value="Absent">Absent</option>
-                <option value="Late">Late</option>
-              </select>
             </div>
 
             {% comment %} <div class="form-group mb-3">
-              <select class="form-select" name="program" required>
-                <option value="" selected disabled>Select Student Program</option>
-                <optgroup label="Computing Programs">
-                  <option value="Diploma in Business Computing">Diploma in Business Computing (DBC)</option>
-                  <option value="Networking Information Security">Networking Information Security (NIS)</option>
-                  <option value="Certificate in Software Development">Certificate in Software Development (CSD)</option>
-                </optgroup>
-                <optgroup label="Business Programs">
-                  <option value="Office Application">Office Application (OPS)</option>
-                  <option value="Data Analytics with Power BI">Data Analytics with Power BI</option>
-                </optgroup>
-                <optgroup label="Certifications">
-                  <option value="cisa">Certified Information System Auditor (CISA)</option>
-                  <option value="itil">Information Technology Infrastructure Library (ITIL)</option>
-                  <option value="cybersecurity">Cybersecurity</option>
-                  <option value="data analytics">Data Analytics</option>
-                </optgroup>
-              </select>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Enter subject name"
+                name="subject_name"
+                required
+              />
             </div> {% endcomment %}
 
-            <div class="form-group">
-              <button class="btn btn-primary w-100" type="submit">Submit</button>
+            <!-- Select Subject -->
+            <div class="mb-3">
+             
+              
+              <select class="form-select" id="subject-select" name="subject_name" required>
+                <option value="" selected disabled>Select Subject</option>
+                <optgroup label="Diploma in Business Computing">
+                  <option value="Database">Database</option>
+                  <option value="PHP">PHP</option>
+                  <option value="Laravel">Laravel</option>
+                  <option value="Asp.net mvc">Asp.net mvc</option>
+                  <option value="React with node.js">React with node.js</option>
+                </optgroup>
+                <optgroup label="Networking Information Security (NIS)">
+                  <option value="OSI and TCP/IP Models">OSI and TCP/IP Models</option>
+                  <option value="Basics of Linux Command Line">Basics of Linux Command Line</option>
+                  <option value="Vulnerability Assessment Tools and Techniques">
+                    Vulnerability Assessment Tools and Techniques
+                  </option>
+                  <option value="Hashing Algorithm">Hashing Algorithm</option>
+                  <option value="Public Key Infrastructure">Public Key Infrastructure</option>
+                  <option value="Attack Vectors and Techniques">
+                    Attack Vectors and Techniques
+                  </option>
+                </optgroup>
+                <optgroup label="Office Application">
+                  <option value="Online Essential">Online Essential</option>
+                  <option value="Word Processing">Word Processing</option>
+                  <option value="Spread Sheet(Excel)">Spread Sheet(Excel)</option>
+                  <option value="Power Point(Presentation)">Power Point(Presentation)</option>
+                  <option value="IT Security">IT Security</option>
+                  <option value="Digital Marketing">Digital Marketing</option>
+                </optgroup>
+              </select>
+            </div>
+
+
+
+           
+
+            <div class="mb-3">
+              <label for="status">Status</label>
+              <select class="form-control mt-2" name="status" required>
+               
+                  <option value="Present">Present</option>
+                  <option value="Absent">Absent</option>
+                  <option value="Late">Late</option>
+                
+                
+
+              </select>
+            </div>
+
+
+
+            <div class="d-grid gap-2">
+              <button class="btn btn-primary" type="submit">
+                <i class="bi bi-plus-circle me-2"></i> Add Course
+              </button>
             </div>
           </form>
         </div>
+      </div>
+      </div>
         <div class="col-md-8">
-
-          <h2 class="text-center text-white bg-dark p-1">Attendance Details</h2>
-          
+          <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+           
+          <h2 class="text-center p-1 mb-0">Attendance Details</h2>
+        </div>
+          <div class="card-body">
           {% for message in messages  %}               
 
           <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
@@ -153,9 +140,10 @@
           <table class="table">
             <thead>
               <tr>
-                <th scope="col">Student ID</th>
+                <th scope="col">ID</th>
+                <th scope="col">Subject Id</th>
+                <th scope="col">Subject Name</th>
                 <th scope="col">Status</th>
-                <th scope="col">Subject</th>
                
 
                 <th scope="col">Actions</th>
@@ -165,20 +153,28 @@
               {% for attendance in attendance_list  %}
               <tr>
                 <th scope="row">{{attendance.id}}</th>
-                <td>{{attendance.subject}}</td>
+                <td>{{attendance.subject_id}}</td>
+                <td>{{attendance.subject_name}}</td>
                 <td>{{attendance.status}}</td>
-                <!-- <td>{{attendance.last_name}}</td>
-                <td>{{attendance.status}}</td>
-                <td>{{attendance.program}}</td> -->
-                <td>
-                    <a href="/update/{{attendance.id}}" class="btn btn-outline-primary">Edit</a>
-                    <a href="/delete/{{attendance.id}}" class="btn btn-outline-danger">Delete</a>
-                </td>
+                
+                <td class="text-center">
+                  <div class="btn-group" role="group">
+                    <a href="{% url 'update_attendance' attendance.id %}" class="btn btn-outline-primary btn-sm">
+                      <i class="bi bi-pencil-square"></i> Edit
+                  </a>
+                      <a href="/delete/{{attendance.id}}" class="btn btn-outline-danger btn-sm">
+                          <i class="bi bi-trash"></i> Delete
+                      </a>
+                  </div>
+              </td>
               </tr>
               {% endfor %}
              </tbody>
           </table>
         </div>
+     
+    </div>
+  </div>
       </div>
     </div>
 

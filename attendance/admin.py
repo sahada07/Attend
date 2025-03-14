@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import Admin, Staff, Courses, Subjects, Students, Attendances, AttendanceReport, LeaveReportStudent, LeaveReportStaff, FeedbackStudent, FeedbackStaff, NotificationStudent, NotificationStaff
+from .models import Staff, Courses, Subjects, Students, Attendances, AttendanceReport, LeaveReportStudent, LeaveReportStaff, FeedbackStudent, FeedbackStaff, NotificationStudent, NotificationStaff
 
-admin.site.register(Admin)
+
 admin.site.register(Staff)
 admin.site.register(Courses)
 admin.site.register(Subjects)

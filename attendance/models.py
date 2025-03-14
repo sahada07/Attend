@@ -2,35 +2,44 @@ from django.db import models
 
 # Create your models here.
 
-
-class Admin(models.Model):
+class User(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255 , default='')
     email = models.EmailField(max_length=255)
     password = models.CharField(max_length=255)
+    role = models.CharField(max_length=20, choices=[('admin', 'Admin'), ('user', 'User')], default='user')
+    
     objects = models.Manager()
+    
+    def is_admin(self):
+        return self.role == 'admin'
 
 class Staff(models.Model):
     id = models.AutoField(primary_key=True)
     full_name = models.CharField(max_length=255)
     email = models.EmailField(max_length=255)
-    password = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
+    def __str__(self):
+        return self.full_name
 
 class Courses(models.Model):
-    id = models.AutoField(primary_key=True)
+    course_id = models.AutoField(primary_key=True)
     course_name = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
+    def __str__(self):
+        return self.course_name
+
 
 class Subjects(models.Model):
     id = models.AutoField(primary_key=True)
-    course= models.ForeignKey(Courses, on_delete=models.CASCADE)
+    course_id= models.ForeignKey(Courses, on_delete=models.CASCADE)
+    course_name= models.CharField(max_length=255, editable=False , null=True, blank=True)
     subject_name = models.CharField(max_length=255)
-    staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    staff = models.CharField(max_length=225)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
@@ -40,22 +49,28 @@ class Students(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255, default='')
     email = models.EmailField(max_length=255)
-    password = models.CharField(max_length=255)
     gender = models.CharField(max_length=50)
-    profile_pic = models.FileField(upload_to='student_profiles/')
-    address = models.TextField()
-    course = models.ForeignKey(Courses, on_delete=models.DO_NOTHING, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True, null=True)
-    updated_at = models.DateTimeField(auto_now=True, null=True)
+    # profile_pic = models.FileField(upload_to='student_profiles/')
+    # address = models.TextField()
+    program = models.CharField( max_length=255,null=True, blank=True)
+    # created_at = models.DateTimeField(auto_now_add=True, null=True)
+    # updated_at = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
 class Attendances(models.Model):
+    STATUS_CHOICES = [
+        ('Present', 'Present'),
+        ('Absent', 'Absent'),
+        ('Late', 'Late'),
+    ]
+
     id = models.AutoField(primary_key=True)
-    subject = models.ForeignKey(Subjects, on_delete=models.DO_NOTHING)
-    status=models.BooleanField(default=False)
-    attendance_date = models.DateTimeField()
+    subject_id = models.ForeignKey(Subjects, on_delete=models.DO_NOTHING)
+    subject_name = models.CharField(max_length=255, null=True, blank=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Absent')
+    attendance_date = models.DateTimeField(auto_now_add=True)  # Automatically set to current date and time
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
