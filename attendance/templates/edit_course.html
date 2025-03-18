@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <title>Update Course | Course Management System</title>
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'course' %}">
+          <i class="bi bi-book me-2"></i>Course Management
+        </a>
+      </div>
+    </nav>
+
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+              <h2 class="text-center p-2 mb-0">Edit subject
+                <i class="bi bi-pencil-square me-2"></i>Update Course Details
+              </h2>
+            </div>
+            <div class="card-body p-4">
+              <form action="{% url 'update_course' course.course_id %}" method="post"> 
+                {% csrf_token %}
+                
+                <div class="form-group mb-4">
+                  <label for="course_id" class="form-label">Course ID</label>
+                  <input
+                    type="text"
+                    id="course_id"
+                    class="form-control bg-light"
+                    placeholder="Course ID"
+                    name="course_id"
+                    value="{{ course.course_id }}"
+                    readonly
+                  />
+                  <small class="text-muted">Course ID cannot be changed</small>
+                </div>
+                
+                <div class="form-group mb-4">
+                  <label for="course_name" class="form-label">Course Name</label>
+                  <select class="form-select" id="course_name" name="course_name" required>
+                    <option value="" disabled>Select Course</option>
+                    <option value="Diploma in Business Computing" {% if course.course_name == "Diploma in Business Computing" %}selected{% endif %}>
+                      Diploma in Business Computing (DBC)
+                    </option>
+                    <option value="Networking Information Security" {% if course.course_name == "Networking Information Security" %}selected{% endif %}>
+                      Networking Information Security (NIS)
+                    </option>
+                    <option value="Certificate in Software Development" {% if course.course_name == "Certificate in Software Development" %}selected{% endif %}>
+                      Certificate in Software Development (CSD)
+                    </option>
+                    <option value="Office Application" {% if course.course_name == "Office Application" %}selected{% endif %}>
+                      Office Application (OPS)
+                    </option>
+                    <option value="Data Analytics with Power BI" {% if course.course_name == "Data Analytics with Power BI" %}selected{% endif %}>
+                      Data Analytics with Power BI
+                    </option>
+                    <option value="Certified Information System Auditor" {% if course.course_name == "Certified Information System Auditor" %}selected{% endif %}>
+                      Certified Information System Auditor (CISA)
+                    </option>
+                    <option value="Information Technology Infrastructure Library" {% if course.course_name == "Information Technology Infrastructure Library" %}selected{% endif %}>
+                      Information Technology Infrastructure Library (ITIL)
+                    </option>
+                    <option value="Cybersecurity" {% if course.course_name == "Cybersecurity" %}selected{% endif %}>
+                      Cybersecurity
+                    </option>
+                    <option value="Data Analytics" {% if course.course_name == "Data Analytics" %}selected{% endif %}>
+                      Data Analytics
+                    </option>
+                  </select>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                  <a href="{% url 'course' %}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Cancel
+                  </a>
+
+                  <button type="submit" class="btn btn-success">
+                    <i class="bi bi-check-circle me-2"></i>Update Staff
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div class="card-footer text-muted text-center">
+              <small>Last updated: {{ course.updated_at|date:"F j, Y H:i" }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

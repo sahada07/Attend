@@ -348,6 +348,7 @@ def course_list(request):
     course_member = Courses.objects.all()
     context = {"course_member": course_member}
     return render(request, 'course.html', context)
+
 @admin_required
 def add_course(request):
     """Add a new course."""

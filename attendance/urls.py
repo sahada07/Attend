@@ -9,7 +9,7 @@ from .views import CourseViewSet
 
 urlpatterns = [
     # Main pages
-    path('', views.index, name="index"),
+    # path('', views.index, name="index"),
     # path('attendance', views.attendance, name="attendance"),
     path("subject", views.subject, name="subject"),
     
